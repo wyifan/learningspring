@@ -3,36 +3,28 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.6.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.yifan</groupId>
+        <artifactId>learningspring</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
-
-    <!--project info-->
     <groupId>com.yifan</groupId>
-    <artifactId>learningspring</artifactId>
+    <artifactId>oauthclient</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>learningspring</name>
-    <description>Venture the wonderful land of Spring Boot.</description>
-    <!--change packaging to pom-->
-    <packaging>pom</packaging>
+    <name>oauthclient</name>
+    <description>Client using oauth 2.0 server</description>
 
     <properties>
         <java.version>1.8</java.version>
     </properties>
 
-    <!--ADD MODULES SECTION-->
-    <modules>
-        <module>common</module>
-        <module>oauthserver</module>
-        <module>oauthclient</module>
-    </modules>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-core</artifactId>
         </dependency>
 
         <dependency>

@@ -5,3 +5,6 @@ learn spring
  - 修改pom.xml文件，添加`<packaging>pom</packagine>`
  - 删除除.idea、pom.xml、*.iml文件外其他文件
  - 添加其他modules
+ - 修改module界面中parent信息，修改为父项目信息
+ - 修改父项目的pom文件，添加modules节点，添加子项目
+ - 删除子项目的启动界面以及resources文件中内容
