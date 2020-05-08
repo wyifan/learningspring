@@ -2,6 +2,7 @@ package com.yifan.demo;
 
 import com.yifan.demo.bean.Zoo;
 import com.yifan.demo.config.AppConfig;
+import com.yifan.demo.foundation.annotations.OverrideDemo;
 import com.yifan.demo.service.HelloService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +21,10 @@ public class DemoApplication {
 
     public static void main(String[] args) {
 //        SpringApplication.run(DemoApplication.class, args);
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        OverrideDemo demo = new OverrideDemo();
+        demo.testOverride();
 
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         DemoApplication app = context.getBean(DemoApplication.class);
         app.run();
 
@@ -32,5 +35,4 @@ public class DemoApplication {
         logger.info("Inside the demo application.");
         logger.info(helloService.sayHello());
     }
-
 }
