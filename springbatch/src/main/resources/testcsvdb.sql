@@ -158,6 +158,24 @@ CREATE TABLE "public"."user" (
 ;
 
 -- ----------------------------
+-- Table structure for message
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."message";
+CREATE TABLE "public"."message" (
+  "id" int4 NOT NULL,
+  "content" varchar(255) COLLATE "pg_catalog"."default",
+  "data" varchar(255) COLLATE "pg_catalog"."default",
+  "time" timestamp(6)
+)
+;
+ALTER TABLE "public"."message" OWNER TO "postgres";
+
+-- ----------------------------
+-- Primary Key structure for table message
+-- ----------------------------
+ALTER TABLE "public"."message" ADD CONSTRAINT "message_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
 -- Alter sequences owned by
 -- ----------------------------
 SELECT setval('"public"."batch_job_execution_seq"', 9, true);

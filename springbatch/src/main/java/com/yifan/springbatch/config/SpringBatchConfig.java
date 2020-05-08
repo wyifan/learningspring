@@ -1,5 +1,6 @@
 package com.yifan.springbatch.config;
 
+import com.yifan.springbatch.model.Message;
 import com.yifan.springbatch.model.User;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -29,26 +30,36 @@ public class SpringBatchConfig {
     public Job job(JobBuilderFactory jobBuilderFactory,
                    StepBuilderFactory stepBuilderFactory,
                    ItemReader<User> itemReader,
-                   ItemProcessor<User,User> itemProcessor,
-                   ItemWriter<User> itemWriter
-    ){
-        Step step=stepBuilderFactory.get("ETL-file-load")
-                .<User,User>chunk(10)
+                   ItemProcessor<User, User> itemProcessor,
+                   ItemWriter<User> itemWriter,
+                   ItemProcessor<User, Message> msgProcessor,
+                   ItemWriter<Message> msgWriter
+    ) {
+        Step step = stepBuilderFactory.get("ETL-file-load")
+                .<User, User>chunk(10)
                 .reader(itemReader)
                 .processor(itemProcessor)
                 .writer(itemWriter)
                 .build();
 
-      return  jobBuilderFactory.get("ETL-Job")
+        Step msgStep = stepBuilderFactory.get("MSG-LOAD")
+                .<User, Message>chunk(10)
+                .reader(itemReader)
+                .processor(msgProcessor)
+                .writer(msgWriter)
+                .build();
+
+        return jobBuilderFactory.get("ETL-Job")
                 .incrementer(new RunIdIncrementer())
                 .start(step)
+                .next(msgStep)
                 .build();
     }
 
     @Bean
     public FlatFileItemReader<User> fileItemReader(
 //            @Value("${input}")Resource resource
-    ){
+    ) {
         FlatFileItemReader<User> flatFileItemReader = new FlatFileItemReader<>();
         flatFileItemReader.setResource(new ClassPathResource("users.csv"));
 //        flatFileItemReader.setResource(resource);
@@ -60,15 +71,15 @@ public class SpringBatchConfig {
     }
 
     @Bean
-    public LineMapper<User> lineMapper(){
+    public LineMapper<User> lineMapper() {
         DefaultLineMapper<User> defaultLineMapper = new DefaultLineMapper<>();
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
 
         lineTokenizer.setDelimiter(",");
         lineTokenizer.setStrict(false);
-        lineTokenizer.setNames(new String[]{"id","name","dept","salary"});
+        lineTokenizer.setNames(new String[]{"id", "name", "dept", "salary"});
 
-        BeanWrapperFieldSetMapper<User> fieldSetMapper  = new BeanWrapperFieldSetMapper<>();
+        BeanWrapperFieldSetMapper<User> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
         fieldSetMapper.setTargetType(User.class);
 
         defaultLineMapper.setLineTokenizer(lineTokenizer);
