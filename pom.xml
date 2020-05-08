@@ -27,6 +27,7 @@
         <module>common</module>
         <module>demo</module>
         <module>task</module>
+        <module>springbatch</module>
         <module>oauthserver</module>
         <module>oauthclient</module>
     </modules>
