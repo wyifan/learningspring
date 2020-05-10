@@ -5,11 +5,13 @@ import com.yifan.mybatisdemo.dao.entity.base.Messages;
 import com.yifan.mybatisdemo.dao.entity.base.MessagesExample;
 import com.yifan.mybatisdemo.dto.messages.MessageModifyModel;
 import com.yifan.mybatisdemo.service.base.MessagesService;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
 
+@StepScope
 public class MessageWriter implements ItemWriter<Messages> {
 
     private final MessagesService messagesService;
