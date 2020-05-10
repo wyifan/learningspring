@@ -1,5 +1,7 @@
 package com.yifan.mybatisdemo.config;
 
+import com.yifan.mybatisdemo.common.CommonMybatisItemReader;
+import com.yifan.mybatisdemo.common.CommonMybatisItemWriter;
 import com.yifan.mybatisdemo.dao.entity.base.Messages;
 import com.yifan.mybatisdemo.service.base.MessagesService;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -24,7 +26,7 @@ import java.util.Date;
 @Configuration
 @EnableBatchProcessing
 public class BatchConfig {
-//    @Autowired
+    //    @Autowired
 //    public DataSource dataSource;
 //
 //    @Bean
@@ -33,7 +35,10 @@ public class BatchConfig {
 //        factoryBean.setDataSource(dataSource);
 //        return factoryBean.getObject();
 //    }
-    private static final Date date= new Date();
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
+
+    private static final Date date = new Date();
 
     @Autowired
     private MessagesService messagesService;
@@ -44,10 +49,12 @@ public class BatchConfig {
     ) {
 
         Step step = stepBuilderFactory.get("SendMsgStep")
-                .<Messages,Messages>chunk(10)
-                .reader(new MessageReader(messagesService))
+                .<Messages, Messages>chunk(10)
+//                .reader(new MessageReader(messagesService))
+                .reader(messagesCommonMybatisItemReader())
                 .processor(new MessageProcessor())
-                .writer(new MessageWriter(messagesService))
+                .writer(commonMybatisItemWriter())
+//                .writer(new MessageWriter(messagesService))
                 .allowStartIfComplete(true)
                 .build();
 
@@ -55,6 +62,18 @@ public class BatchConfig {
                 .incrementer(new RunIdIncrementer())
                 .start(step)
                 .build();
+    }
+
+    @Bean
+    @StepScope
+    public CommonMybatisItemReader<Messages> messagesCommonMybatisItemReader() {
+        return new CommonMybatisItemReader(sqlSessionFactory, Messages.class.getSimpleName());
+    }
+
+    @Bean
+    @StepScope
+    public CommonMybatisItemWriter<Messages> commonMybatisItemWriter() {
+        return new CommonMybatisItemWriter<Messages>(sqlSessionFactory, Messages.class.getSimpleName());
     }
 
 }

@@ -474,9 +474,10 @@
     select
     <include refid="Base_Column_List"></include>
     from "messages"
-    <if test="messageType != null">
-      where message_type = ${messageType, jdbcType=SMALLINT}
-    </if>
+<!--    <if test="messageType != null">-->
+--       where message_type = ${messageType, jdbcType=SMALLINT}
+<!--    </if>-->
+    where is_send = 0
     order by insert_time asc
     LIMIT #{_pagesize} offset #{_skiprows}
   </select>
