@@ -477,5 +477,7 @@
     <if test="messageType != null">
       where message_type = ${messageType, jdbcType=SMALLINT}
     </if>
+    order by insert_time asc
+    LIMIT #{_pagesize} offset #{_skiprows}
   </select>
 </mapper>
