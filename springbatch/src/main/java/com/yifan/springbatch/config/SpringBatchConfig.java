@@ -1,7 +1,11 @@
 package com.yifan.springbatch.config;
 
+import com.yifan.springbatch.batch.item.Reader;
+import com.yifan.springbatch.batch.item.process;
+import com.yifan.springbatch.batch.item.writer;
 import com.yifan.springbatch.model.Message;
 import com.yifan.springbatch.model.User;
+import com.yifan.springbatch.repository.UserRepository;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -16,15 +20,22 @@ import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 @EnableBatchProcessing
 public class SpringBatchConfig {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Bean
     public Job job(JobBuilderFactory jobBuilderFactory,
@@ -88,4 +99,22 @@ public class SpringBatchConfig {
         return defaultLineMapper;
 
     }
+
+    @Bean(name = "WriteStringToUser")
+    public Job customJob(JobBuilderFactory jobBuilderFactory,
+                         StepBuilderFactory stepBuilderFactory) {
+
+        Step step = stepBuilderFactory.get("StepStringToUser")
+                .<String,User>chunk(10)
+                .reader(new Reader())
+                .processor(new process())
+                .writer(new writer(userRepository))
+                .build();
+
+        return jobBuilderFactory.get("WriteStringToUser")
+                .incrementer(new RunIdIncrementer())
+                .start(step)
+                .build();
+    }
+
 }

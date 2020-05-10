@@ -28,6 +28,7 @@
         <module>demo</module>
         <module>task</module>
         <module>mybatis</module>
+        <module>mybatisdemo</module>
         <module>springbatch</module>
         <module>oauthserver</module>
         <module>oauthclient</module>
