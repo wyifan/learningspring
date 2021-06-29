@@ -2,14 +2,20 @@ package com.yifan.demo;
 
 import com.yifan.demo.service.TaskAsyncDemo;
 import com.yifan.demo.service.TaskDemo;
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 
 import java.util.concurrent.TimeUnit;
 
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-class DemoApplicationTests {
+public class DemoApplicationTestByJunit {
 
     @Autowired
     private TaskDemo taskDemo;
@@ -18,14 +24,14 @@ class DemoApplicationTests {
     private TaskAsyncDemo taskAsyncDemo;
 
     @Test
-    void task() throws Exception{
+    public void task() throws Exception{
         taskDemo.doTaskOne();
         taskDemo.doTaskTwo();
         taskDemo.doTaskThree();
     }
 
     @Test
-    void taskAsync() throws Exception{
+    public void taskAsync() throws Exception{
         taskAsyncDemo.doTaskOne();
         taskAsyncDemo.doTaskTwo();
         taskAsyncDemo.doTaskThree();
@@ -34,9 +40,4 @@ class DemoApplicationTests {
         TimeUnit.SECONDS.sleep(15);
         System.out.println("over");
     }
-
-    @Test
-    void contextLoads() {
-    }
-
 }
